@@ -1,6 +1,8 @@
 = openvas-omp
 
-Description goes here.
+This library is used for communication with OpenVAS manager over OMP
+You can start, stop, pause and resume scan. Watch progress and status of 
+scan, download report, etc.
 
 == Contributing to openvas-omp
  

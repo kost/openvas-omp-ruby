@@ -15,14 +15,18 @@ Jeweler::Tasks.new do |gem|
   gem.name = "openvas-omp"
   gem.homepage = "http://github.com/kost/openvas-omp"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{Communicate with OpenVAS manager through OMP}
+  gem.description = %Q{Communicate with OpenVAS manager through OMP. 
+This library is used for communication with OpenVAS manager over OMP.
+You can start, stop, pause and resume scan. Watch progress and status of
+scan, download report, etc.}
   gem.email = "vlatko.kosturjak@gmail.com"
   gem.authors = ["Vlatko Kosturjak"]
   # Include your dependencies below. Runtime dependencies are required when using your gem,
   # and development dependencies are only needed for development (ie running rake tasks, tests, etc)
   #  gem.add_runtime_dependency 'jabber4r', '> 0.1'
   #  gem.add_development_dependency 'rspec', '> 1.2.3'
+  gem.rubyforge_project = "openvas-omp"
 end
 Jeweler::RubygemsDotOrgTasks.new
 
