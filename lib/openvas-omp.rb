@@ -81,7 +81,7 @@ module OpenVASOMP
 		end
 	end
 
-	# Class which uses standard REXML to parse OpenVAS replies.
+	# Core class for OMP communication protocol 
 	class OpenVASOMP
 		# initialize object: try to connect to OpenVAS using URL, user and password
 		#
