@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+# added by jkl to test access
+
 require_relative "./common"
 require_relative '../lib/openvas-omp'
 
