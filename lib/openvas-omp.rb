@@ -70,20 +70,20 @@ module OpenVASOMP
   end
 
   class OMPResponseError < OMPError
-    def initialize reason=nil
-      self.reason = (reason.nil? ) ? 'Error in OMP request/response' : reason
+    def initialize(reason=nil)
+      self.reason = (reason.nil?) ? 'Error in OMP request/response' : reason
     end
   end
 
   class OMPAuthError < OMPError
-    def initialize  reason=nil
-      self.reason = (reason.nil? ) ? 'Authentication failed' : reason
+    def initialize(reason=nil)
+      self.reason = (reason.nil?) ? 'Authentication failed' : reason
     end
   end
 
   class XMLParsingError < OMPError
-    def initialize reason=nil
-      self.reason = (reason.nil? ) ? 'XML parsing failed' : reason
+    def initialize(reason=nil)
+      self.reason = (reason.nil?) ? 'XML parsing failed' : reason
     end
   end
 
@@ -169,7 +169,7 @@ module OpenVASOMP
     # ov.disconnect;
     #
     def sendrecv (tosend)
-      if not @socket
+      unless @socket
         connect
       end
 
@@ -277,7 +277,7 @@ module OpenVASOMP
     # ov.login
     #
     def login
-      areq='<authenticate>'+xml_ele("credentials", {'username' => @user, 'password' => @password}).to_s+'</authenticate>'
+      areq='<authenticate>'+xml_ele('credentials', {'username' => @user, 'password' => @password}).to_s+'</authenticate>'
       resp=sendrecv("#{areq}<HELP/>")
       # wrap it inside tags, so rexml does not complain
       resp = "<X>#{resp}</X>"
@@ -343,8 +343,8 @@ module OpenVASOMP
     # rexmlobject = ov.request_xml("<HELP/")
     #
     def omp_request_xml (request)
-      resp=sendrecv(@areq+request)
-      resp = "<X>"+resp+"</X>"
+      resp = sendrecv(@areq+request)
+      resp = "<X>#{resp}</X>"
 
       begin
         docxml = REXML::Document.new(resp)
@@ -366,7 +366,7 @@ module OpenVASOMP
     # 	"hosts"=>"127.0.0.1","comment"=>"yes")
     #
     def target_create (p={})
-      xmlreq=xml_ele('create_target', p).to_s
+      xmlreq = xml_ele('create_target', p).to_s
 
       begin
         omp_request_xml(xmlreq).elements['create_target_response'].attributes['id']
@@ -444,7 +444,6 @@ module OpenVASOMP
           td['in_use']=target.elements['in_use'].text
           return td
         end
-        td  # TODO  can there be more than one ?
       rescue
         raise OMPResponseError
       end
@@ -579,7 +578,6 @@ module OpenVASOMP
       rescue
         raise OMPResponseError
       end
-      return false
     end
 
     # OMP - get configs and returns hash as response
@@ -600,11 +598,10 @@ module OpenVASOMP
           name=config.elements["name"].text
           list[id]=name
         end
-        return list
+        list
       rescue
         raise OMPResponseError
       end
-      return false
     end
 
     # OMP - copy config with new name and returns new id
@@ -748,7 +745,7 @@ module OpenVASOMP
     # "config"=>config_id}
     #
     def task_create (p={})
-      specials=Array["config", "target", "escalator", "schedule"]
+      specials=Array['config', "target", "escalator", "schedule"]
       ids = Hash.new
       specials.each do |spec|
         if p.has_key?(spec)
@@ -766,7 +763,7 @@ module OpenVASOMP
     # ov.task_delete(task_id)
     #
     def task_delete (task_id)
-      xmlreq=xml_attr("delete_task", {'task_id' => task_id}).to_s
+      xmlreq=xml_attr('delete_task', {'task_id' => task_id}).to_s
       begin
         omp_request_xml(xmlreq)
       rescue
@@ -781,7 +778,7 @@ module OpenVASOMP
     # rexmlobject=ov.task_get_raw("details"=>"0")
     #
     def task_get_raw (p={})
-      xmlreq=xml_attr("get_tasks", p).to_s
+      xmlreq=xml_attr('get_tasks', p).to_s
       begin
         omp_request_xml(xmlreq)
       rescue
@@ -807,12 +804,12 @@ module OpenVASOMP
         td['comment']=task.elements['comment'].text
         td['status']=task.elements['status'].text
         td['progress']=task.elements['progress'].text
-        if defined? task.elements['first_report'].elements['report'].attributes['id'] then
+        if defined? task.elements['first_report'].elements['report'].attributes['id']
           td['firstreport']=task.elements['first_report'].elements['report'].attributes['id']
         else
           td['firstreport']=nil
         end
-        if defined? task.elements['last_report'].elements["report"].attributes['id'] then
+        if defined? task.elements['last_report'].elements["report"].attributes['id']
           td['lastreport']=task.elements["last_report"].elements["report"].attributes['id']
         else
           td['lastreport']=nil
@@ -831,7 +828,7 @@ module OpenVASOMP
     # hash=ov.task_get_byid(task_id)
     #
     def task_get_byid (id)
-      xr=task_get_raw('task_id' => id, "details" => 0)
+      xr=task_get_raw('task_id' => id, 'details' => 0)
       xr.elements.each('//get_tasks_response/task') do |task|
         td=Hash.new
         td['id']=task.attributes['id']
@@ -846,8 +843,8 @@ module OpenVASOMP
           td['firstreport']=nil
         end
 
-        if defined? task.elements['last_report'].elements["report"].attributes['id']
-          td['lastreport']=task.elements['last_report'].elements["report"].attributes['id']
+        if defined? task.elements['last_report'].elements['report'].attributes['id']
+          td['lastreport']=task.elements['last_report'].elements['report'].attributes['id']
         else
           td['lastreport']=nil
         end
@@ -865,9 +862,9 @@ module OpenVASOMP
     # end
     #
     def task_finished (id)
-      xr=task_get_raw('task_id' => id, "details" => 0)
+      xr=task_get_raw('task_id' => id, 'details' => 0)
       xr.elements.each('//get_tasks_response/task') do |task|
-        return (status=task.elements['status'].text == "Done") ? true : false
+        return (task.elements['status'].text == 'Done') ? true : false
       end
     end
 
@@ -880,9 +877,9 @@ module OpenVASOMP
     # puts ov.task_progress(task_id)
     #
     def task_progress (id)
-      xr=task_get_raw('task_id' => id, "details" => 0)
+      xr=task_get_raw('task_id' => id, 'details' => 0)
       xr.elements.each('//get_tasks_response/task') do |task|
-        return task.elements["progress"].text.to_i
+        return task.elements['progress'].text.to_i
       end
     end
 
@@ -893,7 +890,7 @@ module OpenVASOMP
     # ov.task_start(task_id)
     #
     def task_start (task_id)
-      xmlreq=xml_attr("start_task", {'task_id' => task_id}).to_s
+      xmlreq=xml_attr('start_task', {'task_id' => task_id}).to_s
       begin
         omp_request_xml(xmlreq)
       rescue
