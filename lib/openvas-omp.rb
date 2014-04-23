@@ -56,7 +56,7 @@ require 'base64'
 
 module OpenVASOMP
 
-  class OMPError < :: RuntimeError
+  class OMPError < ::RuntimeError
     attr_accessor :req, :reason
 
     def initialize(req, reason = '')
@@ -143,10 +143,13 @@ module OpenVASOMP
     # ov.connect
     #
     def connect
-      @plain_socket=TCPSocket.open(@host, @port)
+      plain_socket=TCPSocket.open(@host, @port)
       ssl_context = OpenSSL::SSL::SSLContext.new
-      @socket = OpenSSL::SSL::SSLSocket.new(@plain_socket, ssl_context)
-      @socket.sync_close = true
+      @socket = OpenSSL::SSL::SSLSocket.new(plain_socket, ssl_context)
+
+      # TODO what did this do ???
+      #@socket.sync_close = true
+
       @socket.connect
     end
 
