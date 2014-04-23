@@ -2,10 +2,10 @@
 
 # added by jkl to test access
 
-require_relative "./common"
 require_relative '../lib/openvas-omp'
+require_relative "./common"
 
-ov = OpenVASOMP::OpenVASOMP.new("user"=>USER,"password"=>PASS,"host"=>URI,"debug"=>0)
+ov = OpenVASOMP::OpenVASOMP.new( :user =>USER, :password =>PASS, :host =>HOST, :debug =>0)
 
 puts "Openvas Version #{ov.version_get}"
 

@@ -2,4 +2,4 @@
 
 USER = 'tester'
 PASS = 'tester'
-URI = '192.168.101.115'
+HOST = '192.168.101.115'

@@ -1,17 +1,17 @@
 #!/usr/bin/env ruby
 
-require_relative "./common"
 require_relative '../lib/openvas-omp'
+require_relative "./common"
 
-ov = OpenVASOMP::OpenVASOMP.new("user"=>USER,"password"=>PASS,"host"=>URI,"debug"=>0)
+ov = OpenVASOMP::OpenVASOMP.new(:user=>USER, :password =>PASS, :host =>HOST, :debug=>0)
 
-config = ov.config_get().index("Full and fast")
+config = ov.config_get().key("Full and fast")
 puts "Config: #{config}"
 
-target = ov.target_create({"name"=>"t", "hosts"=>"127.0.0.1", "comment"=>"t"})
+target = ov.target_create({"name"=>"t2", "hosts"=>"127.0.0.1", "comment"=>"t"})
 puts "Target: #{target}"
 
-taskid = ov.task_create({"name"=>"t","comment"=>"t", "target"=>target, "config"=>config})
+taskid = ov.task_create({"name"=>"t2","comment"=>"t", "target"=>target, "config"=>config})
 puts "Taskid: #{taskid}"
 
 ov.task_start(taskid)
