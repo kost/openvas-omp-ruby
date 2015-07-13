@@ -1,14 +1,19 @@
 #!/usr/bin/env ruby
-# Basic example of openvas-omp usage
 
-# in case you're using Ruby 1.8 and using gem, you should uncomment line below
-# require 'rubygems'
-require 'openvas-omp'
+require_relative '../lib/openvas-omp'
+require_relative "./common"
 
-ov=OpenVASOMP::OpenVASOMP.new("user"=>'openvas',"password"=>'openvas')
-config=ov.config_get().index("Full and fast")
-target=ov.target_create({"name"=>"t", "hosts"=>"127.0.0.1", "comment"=>"t"})
-taskid=ov.task_create({"name"=>"t","comment"=>"t", "target"=>target, "config"=>config})
+ov = OpenVASOMP::OpenVASOMP.new(:user=>USER, :password =>PASS, :host =>HOST, :debug=>0)
+
+config = ov.config_get().key("Full and fast")
+puts "Config: #{config}"
+
+target = ov.target_create({"name"=>"t2", "hosts"=>"127.0.0.1", "comment"=>"t"})
+puts "Target: #{target}"
+
+taskid = ov.task_create({"name"=>"t2","comment"=>"t", "target"=>target, "config"=>config})
+puts "Taskid: #{taskid}"
+
 ov.task_start(taskid)
 while not ov.task_finished(taskid) do
         stat=ov.task_get_byid(taskid)
@@ -16,6 +21,8 @@ while not ov.task_finished(taskid) do
         sleep 10
 end
 stat=ov.task_get_byid(taskid)
-content=ov.report_get_byid(stat["lastreport"],'HTML')
-File.open('report.html', 'w') {|f| f.write(content) }
+
+# this is broken in version 4
+# content=ov.report_get_byid(stat["lastreport"],'HTML')
+# File.open('report.html', 'w') {|f| f.write(content) }
 
