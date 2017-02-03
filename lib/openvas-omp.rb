@@ -198,7 +198,7 @@ module OpenVASOMP
 			size=0
 			begin	
 				begin
-				timeout(@read_timeout) {
+				Timeout.timeout(@read_timeout) {
 				    a = @socket.sysread(@bufsize)
 				    size=a.length
 				    # puts "sysread #{size} bytes"
