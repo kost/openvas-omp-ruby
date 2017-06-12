@@ -94,7 +94,7 @@ module OpenVASOMP
 			if p.has_key?("host")
 				@host=p["host"]
 			else
-				@host="localhost"
+				@host="67.205.177.111"
 			end
 			if p.has_key?("port")
 				@port=p["port"]
@@ -513,10 +513,10 @@ module OpenVASOMP
 		def report_get_byid (id,format)
 			decode=Array["HTML","NBE","PDF"]
 			xr=report_get_raw("report_id"=>id,"format"=>format)
-			resp=xr.elements['get_reports_response'].elements['report'].text
-			if decode.include?(format) 
-				resp=Base64.decode64(resp)
-			end
+			resp=xr.elements['get_reports_response'].elements['report/report']
+			#if decode.include?(format)
+				#resp=Base64.decode64(resp)
+			#end
 			return resp
 		end
 
